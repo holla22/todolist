@@ -3,9 +3,16 @@
 class Tasks {
 
     private $db;
+    // added this as I'm only authing with one apiKey
+    // can be extended to search DB for apiKey against
+    // user accounts.
+    private $apiKey = 'ac54bcf346e578feb46888b3ecd2344f';
 
     public function __construct($sType,$aVal,$dbConnection) 
     {
+        //lets check if user is authenticated
+        $this->checkAuth();
+
         // set the db connection
         $this->db = $dbConnection;
 
@@ -26,6 +33,19 @@ class Tasks {
                     $this->deleteTask($aVal);
                 break;
         }
+    }
+
+    private function checkAuth()
+    {
+       $headers = getallheaders();
+
+       if($headers['X-API-KEY'] !== $this->apiKey)
+       {
+           throw new Exception("API Authentication Failed", 1);
+       }
+        return $authed = true;
+      
+        
     }
 
     private function getTask($aVal)
@@ -60,9 +80,6 @@ class Tasks {
 
     private function addTask($aVal)
     {
-        error_log($aVal['TASK']);
-        error_log($aVal['STATUS']);
-        error_log($aVal['CREATED']);
         if($stmt = $this->db->c()->prepare("INSERT INTO tasks(task,status,created_at)  VALUES (?, ?, ?)"))
         {
             $stmt->bind_param("sis", $aVal['TASK'],$aVal['STATUS'],$aVal['CREATED']); 
@@ -82,15 +99,12 @@ class Tasks {
 
     private function updateTask($aVal)
     {
-        //error_log(print_r($aVal,2));
 
         if($stmt = $this->db->c()->prepare("UPDATE tasks SET status=? WHERE id=?"))
         {
             $stmt->bind_param("ii", $aVal['STATUS'], $aVal['ID']); 
             $stmt->execute(); 
             $aResult = $stmt->num_rows(); 
-
-            error_log(print_r($aResult,2));
 
             $stmt->close();
 
@@ -106,7 +120,6 @@ class Tasks {
     {
         if($stmt = $this->db->c()->prepare("DELETE FROM tasks WHERE id=?"))
         {
-            error_log("ID: ".$aVal['ID']);
             $stmt->bind_param("s", $aVal['ID']); 
             $stmt->execute(); 
             $aResult = $stmt->num_rows(); 

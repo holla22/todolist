@@ -15,7 +15,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
     method: 'POST',
     url: 'php/main.php',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
     },
     data: { type: 'get' }
   }
@@ -33,7 +34,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
         method: 'POST',
         url: 'php/main.php',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+          'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
         },
         data: { type: 'add', task: task }
       }
@@ -53,7 +55,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
         method: 'POST',
         url: 'php/main.php',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+          'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
         },
         data: { type: 'delete', taskId: task }
       }
@@ -76,7 +79,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
       method: 'POST',
       url: 'php/main.php',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
       },
       data: { type: 'update', status: status, taskId: item }
     }
@@ -108,7 +112,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
             method: 'POST',
             url: 'php/main.php',
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+              'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
             },
             data: { type: 'update', status: itm.STATUS, taskId: itm.ID }
           }
@@ -127,7 +132,8 @@ app.controller('tasksController', function($scope, $http, $filter) {
             method: 'POST',
             url: 'php/main.php',
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+              'X-API-KEY' : 'ac54bcf346e578feb46888b3ecd2344f'
             },
             data: { type: 'update', status: itm.STATUS, taskId: itm.ID }
           }
