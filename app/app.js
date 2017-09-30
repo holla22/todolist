@@ -1,62 +1,138 @@
 //Define an angular module for our app
 var app = angular.module('myApp', []);
 
+
 app.controller('tasksController', function($scope, $http, $filter) {
+
+  // getTasks method for getting all tasks
   getTask(); // Load all available tasks 
   function getTask() {  
-  $http.post("php/getTask.php").then(function(data){
+  var data = {
+    type:'get'
+  };
+
+  var req = {
+    method: 'POST',
+    url: 'php/main.php',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    },
+    data: { type: 'get' }
+  }
+  $http(req).then(function(data){
         $scope.tasks = data.data;
 
         console.log($scope.tasks);
        });
   };
-  $scope.addTask = function (task) {
-    $http.post("php/addTask.php?task="+task).then(function(data){
+
+  // addTask method for adding tasks
+  $scope.addTask = function (task) { 
+      // set request parameters      
+      var req = {
+        method: 'POST',
+        url: 'php/main.php',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },
+        data: { type: 'add', task: task }
+      }
+
+    $http(req).then(function(data){
         getTask();
         $scope.taskInput = "";
       });
   };
+
+  // deleteTask method for deleting tasks
   $scope.deleteTask = function (task) {
     if(confirm("Are you sure to delete this line?")){
-    $http.post("php/deleteTask.php?taskID="+task).then(function(data){
+
+      console.log(task)
+      var req = {
+        method: 'POST',
+        url: 'php/main.php',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },
+        data: { type: 'delete', taskId: task }
+      }
+
+
+    $http(req).then(function(data){
         getTask();
       });
     }
   };
 
+  // toggelStatus method for updating tasks
   $scope.toggleStatus = function(item, status, task) {
+
+    var taskSet = false;
     if(status=='2'){status='0';}else{status='2';}
-      $http.post("php/updateTask.php?taskID="+item+"&status="+status).then(function(data){
-        getTask();
-      });
+
+    // set request parameters      
+    var req = {
+      method: 'POST',
+      url: 'php/main.php',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+      data: { type: 'update', status: status, taskId: item }
+    }
+    
+    $http(req).then(function(data) {
+      getTask();
+    });
+
      // check if an item was selected or not
      $scope.isAllSelected = $scope.tasks.every(function(itm){ return itm.selected; });
 
   };
 
-  // SELECT ALL || UNSELECT ALL
+    // SELECT ALL || UNSELECT ALL
   $scope.toggleAll = function() {
      var toggleStatus = $scope.isAllSelected;
      
      angular.forEach($scope.tasks, function(itm){ 
 
-       console.log(itm);
+       //console.log(itm);
        itm.selected = toggleStatus; 
-
 
        if(itm.STATUS!=='2' && itm.selected == true)
        {
          itm.STATUS='2';
+
+         // set request parameters      
+          var req = {
+            method: 'POST',
+            url: 'php/main.php',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+            data: { type: 'update', status: itm.STATUS, taskId: itm.ID }
+          }
+
          // UPDATE all SELECTED
-         $http.post("php/updateTask.php?taskID="+itm.ID+"&status="+itm.STATUS).then(function(data){
+         $http(req).then(function(data){
           getTask();
          });
        }
        else if(itm.selected == false)
        {
          itm.STATUS='0';
+
+         // set request parameters      
+          var req = {
+            method: 'POST',
+            url: 'php/main.php',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+            data: { type: 'update', status: itm.STATUS, taskId: itm.ID }
+          }
          // UPDATE all SELECTED
-         $http.post("php/updateTask.php?taskID="+itm.ID+"&status="+itm.STATUS).then(function(data){
+         $http(req).then(function(data){
           getTask();
          });
         
