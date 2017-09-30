@@ -4,9 +4,9 @@ class Tasks {
 
     private $db;
     // added this as I'm only authing with one apiKey
-    // can be extended to search DB for apiKey against
+    // can be extended to search DB for authKey against
     // user accounts.
-    private $apiKey = 'ac54bcf346e578feb46888b3ecd2344f';
+    private $authKey = 'ac54bcf346e578feb46888b3ecd2344f';
 
     public function __construct($sType,$aVal,$dbConnection) 
     {
@@ -39,7 +39,7 @@ class Tasks {
     {
        $headers = getallheaders();
 
-       if($headers['X-API-KEY'] !== $this->apiKey)
+       if($headers['X-AUTH-KEY'] !== $this->authKey)
        {
            throw new Exception("API Authentication Failed", 1);
        }
